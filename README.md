@@ -1,7 +1,7 @@
-# portfolio
+# nlp notebook
 
-This is a personal portofolio website used `Streamlit` framework.\
-Feel free to use my framework but don't use my personal info please!\
-Run this by using commond `streamlit run 🏠_Mainpage.py`
+I hope to post little projects along with my nlp study journey.\
+Feel free to fork my website!\
+Run this by using commond `streamlit sentiment.py`
 
 <img width="840"  src="https://github.com/Rsirp0c/nlp-notebook/blob/main/src/Screenshot.png">
