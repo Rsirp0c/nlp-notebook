@@ -74,7 +74,7 @@ with tab1:
 with tab2:
     st.subheader("Test the model with a file",divider = "rainbow")
     test_type = st.session_state.model_type
-    f"##### The current model is :blue[{test_type}], press the button to test the model 👇"
+    f"##### The current model is `{test_type}`, press the button to test the model 👇"
     
     if test_type == None:
         st.error('Please select a dataset to test the model')
