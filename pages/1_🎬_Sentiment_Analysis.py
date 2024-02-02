@@ -73,12 +73,9 @@ with tab1:
 # test the model --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 with tab2:
     st.subheader("Test the model with a file",divider = "rainbow")
-
-    test_type = st.radio("##### :blue[Select a dataset to test]",
-                        options = ["movie review", "movie review small"],
-                        captions = ["POS/NEG", "Action/Romance"],
-                        index = None)
-
+    test_type = st.session_state.model_type
+    f"##### The current model is :blue[{test_type}], press the button to test the model 👇"
+    
     if test_type == None:
         st.error('Please select a dataset to test the model')
     elif test_type == "movie review":
@@ -87,27 +84,27 @@ with tab2:
     elif test_type == "movie review small":
         test_file = 'src/movie_reviews_small/test'
         st.session_state.model = joblib.load('src/small_model.pkl')
+    if st.button("Test the model"):
+        if test_type != None:
+            # Load the test file
+            progress_bar("Analysis in progess... Please wait", "We are done!")
+            loaded_model = st.session_state.model
+            results = loaded_model.system_test(test_file)
+            confusion_matrix, Accuracy, precision, recall, F1 = loaded_model.evaluate(results)
 
-    if test_type != None:
-        # Load the test file
-        progress_bar("Analysis in progess... Please wait", "We are done!")
-        loaded_model = st.session_state.model
-        results = loaded_model.system_test(test_file)
-        confusion_matrix, Accuracy, precision, recall, F1 = loaded_model.evaluate(results)
+            st.subheader("Evaluation metrics",divider = 'grey')
+            st.metric(f"Total accuracy for **{test_type}**", f"{Accuracy*100:.1f}%")
 
-        st.subheader("Evaluation metrics",divider = 'grey')
-        st.metric(f"Total accuracy for **{test_type}**", f"{Accuracy*100:.1f}%")
-
-        c1, c2, c3 = st.columns(3)
-        for i, class_name in enumerate(loaded_model.class_dict):
-            with c1:
-                st.metric(f"Precision for **{class_name}**", f"{precision[i]*100:.1f}%")
-            with c2:
-                st.metric(f"Recall for **{class_name}**", f"{recall[i]*100:.1f}%")
-            with c3:
-                st.metric(f"F1 for **{class_name}**", f"{F1[i]*100:.1f}%")
-        
-        plot_confusion_matrix(confusion_matrix, loaded_model.class_dict)
+            c1, c2, c3 = st.columns(3)
+            for i, class_name in enumerate(loaded_model.class_dict):
+                with c1:
+                    st.metric(f"Precision for **{class_name}**", f"{precision[i]*100:.1f}%")
+                with c2:
+                    st.metric(f"Recall for **{class_name}**", f"{recall[i]*100:.1f}%")
+                with c3:
+                    st.metric(f"F1 for **{class_name}**", f"{F1[i]*100:.1f}%")
+            
+            plot_confusion_matrix(confusion_matrix, loaded_model.class_dict)
 
         
 # explanation --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
